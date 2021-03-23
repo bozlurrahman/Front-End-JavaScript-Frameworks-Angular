@@ -8,9 +8,33 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', async () => {
-    await page.navigateTo();
-    expect(await page.getTitleText()).toEqual('conFusion app is running!');
+  it('should display message saying Ristorante Con Fusion', async () => {
+    await page.navigateTo('/');
+    expect(await page.getParagraphText('app-root h1')).toEqual('Ristorante Con Fusion');
+  });
+
+  it('should navigate to about us page by clicking on the link', async () => {
+    await page.navigateTo('/');
+
+    const navlink = page.getAllElements('a').get(1);
+    await navlink.click();
+
+    expect(await page.getParagraphText('h3')).toBe('About Us');
+  });
+
+  it('should enter a new comment for the first dish', async () => {
+    await page.navigateTo('/dishdetail/0');
+
+    const newAuthor = page.getElement('input[type=text]');
+    await newAuthor.sendKeys('Test Author');
+
+    const newComment = page.getElement('textarea');
+    await newComment.sendKeys('Test Comment');
+
+    const newSubmitButton = page.getElement('button[type=submit]');
+    await newSubmitButton.click();
+    debugger;
+    // browser.pause();
   });
 
   afterEach(async () => {
